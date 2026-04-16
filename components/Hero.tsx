@@ -3,50 +3,18 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
-  const blob1Ref = useRef<HTMLDivElement>(null);
-  const blob2Ref = useRef<HTMLDivElement>(null);
-  const blob3Ref = useRef<HTMLDivElement>(null);
-  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
 
-  useEffect(() => {
-    setMounted(true);
-    
-    let frame: number;
-    const animate = () => {
-      const time = Date.now() * 0.0008;
-      
-      if (blob1Ref.current) {
-        const x = Math.sin(time * 0.6) * 120;
-        const y = Math.cos(time * 0.6 + 1) * 120;
-        blob1Ref.current.style.transform = `translate(${x}px, ${y}px) scale(${1 + Math.sin(time) * 0.1})`;
-      }
-      if (blob2Ref.current) {
-        const x = Math.sin(time * 0.8 + 2) * 120;
-        const y = Math.cos(time * 0.8 + 3) * 120;
-        blob2Ref.current.style.transform = `translate(${x}px, ${y}px) scale(${1 + Math.sin(time + 1) * 0.1})`;
-      }
-      if (blob3Ref.current) {
-        const x = Math.sin(time * 0.5 + 4) * 80;
-        const y = Math.cos(time * 0.5 + 5) * 80;
-        blob3Ref.current.style.transform = `translate(${x}px, ${y}px) scale(${1 + Math.sin(time + 2) * 0.1})`;
-      }
-      
-      frame = requestAnimationFrame(animate);
-    };
-    
-    animate();
-    return () => cancelAnimationFrame(frame);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
   const isDark = !mounted || theme === 'dark' || !theme;
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -56,37 +24,45 @@ export default function Hero() {
   if (!mounted) return null;
 
   return (
-    <section id="hero" ref={containerRef} className="min-h-screen flex items-center pt-20 relative overflow-hidden bg-[#0b0b0f]">
+    <section id="hero" ref={containerRef} className="min-h-screen flex items-center pt-20 relative overflow-hidden">
       <motion.div 
-        className="absolute inset-0 pointer-events-none -z-10"
+        className="absolute inset-0 pointer-events-none"
         style={{ y }}
       >
-        <div className="absolute inset-0 mesh-grid opacity-50" />
-        
         <motion.div 
-          ref={blob1Ref}
-          className="absolute w-[600px] h-[600px] rounded-full blur-[120px] opacity-50 mix-blend-screen"
-          style={{ top: '5%', left: '5%', background: 'radial-gradient(circle,#7c3aed,transparent_70%)' }}
-        />
-        <motion.div 
-          ref={blob2Ref}
-          className="absolute w-[600px] h-[600px] rounded-full blur-[120px] opacity-50 mix-blend-screen"
-          style={{ bottom: '5%', right: '5%', background: 'radial-gradient(circle,#06b6d4,transparent_70%)' }}
-        />
-        <motion.div 
-          ref={blob3Ref}
-          className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 mix-blend-screen"
-          style={{ top: '40%', left: '50%', transform: 'translateX(-50%)', background: 'radial-gradient(circle,#ec4899,transparent_70%)' }}
+          className={`absolute inset-0 ${isDark ? 'bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.08)_0%,_transparent_70%)]' : 'bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.05)_0%,_transparent_70%)]'}`}
+          animate={{ opacity: [0.8, 1, 0.8] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
         
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.6))] opacity-60 pointer-events-none" />
+        <motion.div 
+          className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px] ${isDark ? 'bg-indigo-600/20' : 'bg-indigo-500/15'}`}
+          animate={{ 
+            x: [0, 30, 0], 
+            y: [0, -20, 0],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
         
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.03]">
-          <filter id="noise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#noise)" />
-        </svg>
+        <motion.div 
+          className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[120px] ${isDark ? 'bg-cyan-500/20' : 'bg-cyan-400/15'}`}
+          animate={{ 
+            x: [0, -40, 0], 
+            y: [0, 30, 0],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        />
+        
+        <motion.div 
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px] ${isDark ? 'bg-purple-500/10' : 'bg-purple-400/10'}`}
+          animate={{ 
+            scale: [1, 1.3, 1],
+            rotate: [0, 30, 0]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
@@ -98,6 +74,7 @@ export default function Hero() {
               transition={{ duration: 0.6 }}
             >
               <div className={`inline-flex items-center gap-2 px-4 py-2 glass rounded-sm mb-8`}>
+                <Sparkles className={`w-4 h-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
                 <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Engineering the Future</span>
               </div>
             </motion.div>
@@ -176,6 +153,30 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
+          </motion.div>
+
+          <motion.div 
+            className="hidden lg:flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            <div className="relative">
+              <motion.div
+                className="w-72 h-72 accent-gradient rounded-full flex items-center justify-center"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <span className="text-6xl font-black text-white">DS</span>
+              </motion.div>
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                animate={{ 
+                  boxShadow: ['0 0 30px rgba(99,102,241,0.3)', '0 0 80px rgba(99,102,241,0.6)', '0 0 30px rgba(99,102,241,0.3)']
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </div>
           </motion.div>
         </div>
       </div>
