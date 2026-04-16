@@ -85,36 +85,30 @@ const fragmentShader = `
   }
 
   void main() {
-    colors[0] = vec3(0.043, 0.043, 0.059);
-    colors[1] = vec3(0.12, 0.05, 0.25);
-    colors[2] = vec3(0.05, 0.15, 0.35);
-    colors[3] = vec3(0.25, 0.08, 0.22);
-    colors[4] = vec3(0.1, 0.25, 0.4);
+    vec3 darkBase = vec3(0.043, 0.043, 0.059);
+    vec3 accent1 = vec3(0.08, 0.05, 0.18);
+    vec3 accent2 = vec3(0.04, 0.1, 0.25);
 
     vec2 uv = vUv;
-    vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
-    vec2 mouseInfluence = (uMouse - 0.5) * 0.08;
+    vec2 mouseInfluence = (uMouse - 0.5) * 0.05;
     vec2 distortedUV = uv + mouseInfluence;
-    float time = uTime * 0.1;
+    float time = uTime * 0.08;
 
-    float blob1 = fbm(vec3(distortedUV * 1.5 + vec2(time * 0.3, time * 0.2), time * 0.15));
-    float blob2 = fbm(vec3(distortedUV * 1.2 + vec2(-time * 0.25, time * 0.3), time * 0.2 + 10.0));
-    float blob3 = fbm(vec3(distortedUV * 1.8 + vec2(time * 0.2, -time * 0.15), time * 0.18 + 20.0));
+    float blob1 = fbm(vec3(distortedUV * 1.2 + vec2(time * 0.2, time * 0.15), time * 0.1));
+    float blob2 = fbm(vec3(distortedUV * 1.0 + vec2(-time * 0.15, time * 0.2), time * 0.12 + 10.0));
 
-    float t1 = smoothstep(-0.2, 0.4, blob1);
-    float t2 = smoothstep(-0.15, 0.5, blob2);
-    float t3 = smoothstep(-0.1, 0.6, blob3);
+    float t1 = smoothstep(-0.1, 0.3, blob1);
+    float t2 = smoothstep(-0.08, 0.35, blob2);
 
-    vec3 finalColor = colors[0];
-    finalColor = mix(finalColor, colors[1], t1 * 0.5);
-    finalColor = mix(finalColor, colors[2], t2 * 0.4);
-    finalColor = mix(finalColor, colors[3], t3 * 0.3);
+    vec3 finalColor = darkBase;
+    finalColor = mix(finalColor, accent1, t1 * 0.3);
+    finalColor = mix(finalColor, accent2, t2 * 0.25);
 
-    float glow1 = exp(-4.0 * length(uv - vec2(0.35 + sin(time) * 0.08, 0.45 + cos(time * 0.6) * 0.08)));
-    float glow2 = exp(-4.5 * length(uv - vec2(0.65 + cos(time * 0.7) * 0.08, 0.55 + sin(time * 0.5) * 0.08)));
+    float glow1 = exp(-5.0 * length(uv - vec2(0.3 + sin(time) * 0.05, 0.4 + cos(time * 0.5) * 0.05)));
+    float glow2 = exp(-5.5 * length(uv - vec2(0.7 + cos(time * 0.6) * 0.05, 0.6 + sin(time * 0.4) * 0.05)));
 
-    finalColor += colors[2] * glow1 * 0.12;
-    finalColor += colors[3] * glow2 * 0.1;
+    finalColor += vec3(0.05, 0.12, 0.3) * glow1 * 0.08;
+    finalColor += vec3(0.15, 0.05, 0.2) * glow2 * 0.06;
 
     vec2 vignetteUV = uv * (1.0 - uv);
     float vignette = vignetteUV.x * vignetteUV.y * 15.0;
@@ -122,7 +116,7 @@ const fragmentShader = `
     finalColor *= vignette;
 
     float noise = fract(sin(dot(uv * 1000.0, vec2(12.9898, 78.233))) * 43758.5453);
-    finalColor += (noise - 0.5) * 0.01;
+    finalColor += (noise - 0.5) * 0.008;
 
     gl_FragColor = vec4(finalColor, 1.0);
   }
@@ -158,7 +152,7 @@ export default function MeshGradient({ className = '' }: MeshGradientProps) {
       powerPreference: 'high-performance'
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(1);
     container.appendChild(renderer.domElement);
 
     const uniforms = {

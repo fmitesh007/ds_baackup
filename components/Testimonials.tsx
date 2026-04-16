@@ -76,7 +76,7 @@ export default function Testimonials() {
 
   useEffect(() => {
     if (isPaused) return;
-    const interval = setInterval(nextSlide, 5000);
+    const interval = setInterval(nextSlide, 3000);
     return () => clearInterval(interval);
   }, [isPaused, nextSlide]);
 
@@ -179,7 +179,7 @@ export default function Testimonials() {
                       className="absolute inset-0 bg-indigo-500"
                       initial={{ width: '0%' }}
                       animate={{ width: '100%' }}
-                      transition={{ duration: 5, ease: 'linear' }}
+                      transition={{ duration: 3, ease: 'linear' }}
                       style={{ animation: isPaused ? 'none' : undefined }}
                     />
                   )}

@@ -29,6 +29,32 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={containerRef} className="min-h-screen flex items-center pt-20 relative overflow-hidden">
+      <div className="absolute inset-0 mesh-grid" />
+      <motion.div 
+        className="absolute inset-0 pointer-events-none"
+        style={{ y }}
+      >
+        <motion.div 
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.06)_0%,_transparent_70%)]"
+          animate={{ opacity: [0.8, 1, 0.8] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-72 h-72 rounded-full blur-[100px] bg-indigo-600/15"
+          animate={{ x: [0, 25, 0], y: [0, -15, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full blur-[100px] bg-cyan-500/15"
+          animate={{ x: [0, -30, 0], y: [0, 20, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[120px] bg-purple-500/8"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+      </motion.div>
       <MeshGradient />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
