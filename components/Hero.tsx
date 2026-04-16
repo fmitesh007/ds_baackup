@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const NeuralHead = dynamic(() => import('./NeuralHead'), { ssr: false });
+const NeuralOverlay = dynamic(() => import('./NeuralOverlay'), { ssr: false });
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -67,6 +67,8 @@ export default function Hero() {
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
       </motion.div>
+
+      <NeuralOverlay />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -156,17 +158,6 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
-          </motion.div>
-
-          <motion.div 
-            className="hidden lg:flex items-center justify-center"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <div className="w-80 h-80">
-              <NeuralHead />
-            </div>
           </motion.div>
         </div>
       </div>
