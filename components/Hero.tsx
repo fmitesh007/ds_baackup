@@ -65,21 +65,7 @@ export default function Hero() {
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
 
-        <motion.div 
-          className="absolute top-20 left-10 w-2 h-2 bg-indigo-500 rounded-full"
-          animate={{ y: [0, 20, 0], opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-        <motion.div 
-          className="absolute top-40 right-20 w-1 h-1 bg-cyan-500 rounded-full"
-          animate={{ y: [0, 15, 0], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
-        />
-        <motion.div 
-          className="absolute bottom-40 left-1/4 w-1.5 h-1.5 bg-purple-500 rounded-full"
-          animate={{ y: [0, 25, 0], opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-        />
+        
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
