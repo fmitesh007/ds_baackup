@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
-import { Code, Users, Rocket, Shield, Zap, Globe, Cpu } from 'lucide-react';
+import { Code, Users, Rocket, Shield, Zap, Globe, Cpu, Brain, Cloud, Database, Server } from 'lucide-react';
 
 const features = [
   { icon: Code, title: 'Digital Products', desc: 'Architectural consultation and reference architectures for robust software ecosystems.' },
@@ -13,12 +13,24 @@ const features = [
 ];
 
 const floatingIcons = [
-  { icon: Zap, x: '10%', y: '20%', size: 24, delay: 0 },
-  { icon: Globe, x: '85%', y: '15%', size: 28, delay: 0.5 },
-  { icon: Cpu, x: '75%', y: '70%', size: 20, delay: 1 },
-  { icon: Code, x: '15%', y: '75%', size: 22, delay: 1.5 },
-  { icon: Rocket, x: '50%', y: '10%', size: 18, delay: 2 },
-  { icon: Shield, x: '90%', y: '45%', size: 26, delay: 0.8 },
+  { icon: Zap, x: '5%', y: '15%', size: 28, delay: 0 },
+  { icon: Globe, x: '90%', y: '10%', size: 32, delay: 0.3 },
+  { icon: Cpu, x: '80%', y: '80%', size: 24, delay: 0.6 },
+  { icon: Code, x: '10%', y: '85%', size: 26, delay: 0.9 },
+  { icon: Rocket, x: '50%', y: '5%', size: 20, delay: 1.2 },
+  { icon: Shield, x: '95%', y: '50%', size: 30, delay: 1.5 },
+  { icon: Brain, x: '25%', y: '35%', size: 22, delay: 0.4 },
+  { icon: Cloud, x: '70%', y: '25%', size: 26, delay: 0.7 },
+  { icon: Database, x: '35%', y: '65%', size: 24, delay: 1.0 },
+  { icon: Server, x: '60%', y: '55%', size: 28, delay: 1.3 },
+];
+
+const circuitLines = [
+  { x1: '10%', y1: '20%', x2: '30%', y2: '20%', x3: '40%', y3: '35%' },
+  { x1: '90%', y1: '15%', x2: '70%', y2: '15%', x3: '60%', y3: '30%' },
+  { x1: '85%', y1: '85%', x2: '65%', y2: '85%', x3: '55%', y3: '70%' },
+  { x1: '15%', y1: '80%', x2: '35%', y2: '80%', x3: '45%', y3: '65%' },
+  { x1: '50%', y1: '95%', x2: '50%', y2: '75%', x3: '35%', y3: '60%' },
 ];
 
 export default function About() {
@@ -100,64 +112,130 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="relative h-[400px]">
+            <div className="absolute inset-0">
+              <div className={`absolute inset-0 ${isDark ? 'bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)]' : 'bg-[linear-gradient(rgba(99,102,241,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.02)_1px,transparent_1px)]'} bg-[size:40px_40px]`}></div>
+            </div>
+
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+              {circuitLines.map((line, i) => (
+                <motion.path
+                  key={i}
+                  d={`M ${line.x1} ${line.y1} L ${line.x2} ${line.y2} L ${line.x3} ${line.y3}`}
+                  fill="none"
+                  stroke={isDark ? "rgba(99,102,241,0.3)" : "rgba(99,102,241,0.2)"}
+                  strokeWidth="1"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  whileInView={{ pathLength: 1, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.5, delay: i * 0.2 }}
+                />
+              ))}
+              {circuitLines.map((line, i) => (
+                <motion.circle
+                  key={`dot-${i}`}
+                  cx={line.x3}
+                  cy={line.y3}
+                  r="3"
+                  fill={isDark ? "#6366f1" : "#4f46e5"}
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: [0, 1.5, 1] }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.2 + 0.8 }}
+                />
+              ))}
+            </svg>
+
+            <div className="relative h-[500px] flex items-center justify-center" style={{ zIndex: 2 }}>
               <motion.div 
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 accent-gradient p-[2px]"
-                animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ rotate }}
+                className="relative"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
               >
-                <div className={`w-full h-full flex flex-col items-center justify-center p-6 ${isDark ? 'bg-[#0a0a0f]' : 'bg-white'}`}>
-                  <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="w-20 h-20 accent-gradient flex items-center justify-center mb-4 rounded-full"
-                  >
-                    <Code className="w-10 h-10 text-white" />
-                  </motion.div>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Tech Lab</h3>
-                  <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Building the future</p>
-                </div>
+                <div className={`w-56 h-56 border-2 ${isDark ? 'border-indigo-500/30' : 'border-indigo-500/20'} rounded-none`} style={{ animation: 'spin 20s linear infinite' }}></div>
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 border ${isDark ? 'border-cyan-500/30' : 'border-cyan-500/20'} rounded-none`} style={{ animation: 'spin 15s linear infinite reverse' }}></div>
+                
+                <motion.div 
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 accent-gradient"
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                    boxShadow: ['0 0 20px rgba(99,102,241,0.3)', '0 0 40px rgba(99,102,241,0.5)', '0 0 20px rgba(99,102,241,0.3)']
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <div className={`w-full h-full flex flex-col items-center justify-center ${isDark ? 'bg-[#0a0a0f]' : 'bg-white'}`}>
+                    <motion.div
+                      animate={{ rotate: [0, -360] }}
+                      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                      className="w-16 h-16 accent-gradient flex items-center justify-center mb-3"
+                    >
+                      <Code className="w-8 h-8 text-white" />
+                    </motion.div>
+                    <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>DATASCON</h3>
+                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>TECH LAB</p>
+                  </div>
+                </motion.div>
               </motion.div>
 
               <motion.div 
-                className={`absolute top-5 left-0 glass px-4 py-3 flex items-center gap-3`}
-                animate={{ y: [0, 10, 0], x: [0, 5, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                whileHover={{ scale: 1.1 }}
+                className={`absolute top-4 left-4 glass px-4 py-3 flex items-center gap-3`}
+                animate={{ y: [0, 12, 0], x: [0, 5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                style={{ zIndex: 10 }}
               >
                 <Users className="w-5 h-5 text-indigo-500" />
                 <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Expert Team</span>
               </motion.div>
 
               <motion.div 
-                className={`absolute top-1/2 right-0 glass px-4 py-3 flex items-center gap-3`}
-                animate={{ y: [0, -10, 0], x: [0, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                whileHover={{ scale: 1.1 }}
+                className={`absolute top-20 -right-4 glass px-4 py-3 flex items-center gap-3`}
+                animate={{ y: [0, -12, 0], x: [0, -5, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                style={{ zIndex: 10 }}
               >
                 <Rocket className="w-5 h-5 text-cyan-500" />
                 <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Fast Delivery</span>
               </motion.div>
 
               <motion.div 
-                className={`absolute bottom-10 left-10 glass px-4 py-3 flex items-center gap-3`}
-                animate={{ y: [0, 8, 0], x: [0, 8, 0] }}
+                className={`absolute bottom-20 left-0 glass px-4 py-3 flex items-center gap-3`}
+                animate={{ y: [0, 10, 0], x: [0, 8, 0] }}
                 transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                style={{ zIndex: 10 }}
               >
                 <Shield className="w-5 h-5 text-purple-500" />
                 <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Secure</span>
               </motion.div>
 
               <motion.div 
-                className={`absolute bottom-5 right-10 glass px-4 py-3 flex items-center gap-3`}
-                animate={{ y: [0, -15, 0] }}
+                className={`absolute bottom-4 right-2 glass px-4 py-3 flex items-center gap-3`}
+                animate={{ y: [0, -15, 0], x: [0, -8, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                style={{ zIndex: 10 }}
               >
                 <Zap className="w-5 h-5 text-yellow-500" />
                 <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Innovation</span>
+              </motion.div>
+
+              <motion.div 
+                className={`absolute top-1/3 right-8 glass px-3 py-2`}
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                style={{ zIndex: 10 }}
+              >
+                <Brain className="w-4 h-4 text-pink-500" />
+              </motion.div>
+
+              <motion.div 
+                className={`absolute bottom-1/3 left-4 glass px-3 py-2`}
+                animate={{ rotate: [0, -360] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                style={{ zIndex: 10 }}
+              >
+                <Cloud className="w-4 h-4 text-emerald-500" />
               </motion.div>
             </div>
           </motion.div>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const testimonials = [
   {
@@ -59,23 +59,39 @@ const testimonials = [
 export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const { theme } = useTheme();
 
   useEffect(() => setMounted(true), []);
 
   const isDark = !mounted || theme === 'dark' || !theme;
 
-  if (!mounted) return null;
+  const nextSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % testimonials.length);
+  }, []);
+  
+  const prevSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  }, []);
 
-  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [isPaused, nextSlide]);
 
   const current = testimonials[activeIndex];
+
+  if (!mounted) return null;
 
   return (
     <section id="testimonials" className="py-32 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-indigo-600/10 rounded-full blur-[150px]"></div>
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-indigo-600/10 rounded-full blur-[150px]"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 4, repeat: Infinity }}
+        />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
@@ -90,22 +106,45 @@ export default function Testimonials() {
           </h2>
         </motion.div>
 
-        <div className="relative">
+        <div 
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
               className={`p-8 md:p-12 ${isDark ? 'glass border-l-4 border-indigo-500' : 'bg-white border border-black/10 border-l-4 border-indigo-500'}`}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.4 }}
+              initial={{ opacity: 0, x: 100, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -100, scale: 0.95 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <p className={`text-xl md:text-2xl font-medium leading-relaxed mb-8 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mb-6"
+              >
+                <Quote className={`w-12 h-12 ${isDark ? 'text-indigo-500/30' : 'text-indigo-500/20'}`} />
+              </motion.div>
+              
+              <motion.p 
+                className={`text-xl md:text-2xl font-medium leading-relaxed mb-8 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
                 "{current.text}"
-              </p>
+              </motion.p>
 
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 rounded-full border-2 border-indigo-500 overflow-hidden shadow-lg">
+              <motion.div 
+                className="flex items-center gap-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <div className="w-16 h-16 rounded-none border-2 border-indigo-500 overflow-hidden shadow-lg">
                   <img 
                     src={current.img} 
                     alt={current.name} 
@@ -121,38 +160,47 @@ export default function Testimonials() {
                     <span className="text-indigo-500">{current.role}</span> at <a href={current.companyUrl} target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 transition-colors">{current.company}</a>
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </AnimatePresence>
 
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <button 
-              onClick={prevSlide}
-              className={`w-12 h-12 flex items-center justify-center border transition-colors ${isDark ? 'border-white/10 hover:border-indigo-500' : 'border-black/10 hover:border-indigo-500'}`}
-            >
-              <ChevronLeft className={`w-5 h-5 ${isDark ? 'text-white' : 'text-slate-900'}`} />
-            </button>
-            
+          <div className="flex items-center justify-between mt-8">
             <div className="flex gap-2">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`w-3 h-3 transition-all ${
-                    index === activeIndex 
-                      ? 'bg-indigo-500 w-8' 
-                      : isDark ? 'bg-white/20 hover:bg-white/40' : 'bg-slate-300 hover:bg-slate-400'
-                  }`}
-                />
+                  className="relative h-1 bg-transparent flex items-center"
+                  style={{ width: index === activeIndex ? '40px' : '12px' }}
+                >
+                  <div className={`absolute inset-0 ${isDark ? 'bg-white/20' : 'bg-slate-300'}`}></div>
+                  {index === activeIndex && (
+                    <motion.div 
+                      className="absolute inset-0 bg-indigo-500"
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: 5, ease: 'linear' }}
+                      style={{ animation: isPaused ? 'none' : undefined }}
+                    />
+                  )}
+                </button>
               ))}
             </div>
             
-            <button 
-              onClick={nextSlide}
-              className={`w-12 h-12 flex items-center justify-center border transition-colors ${isDark ? 'border-white/10 hover:border-indigo-500' : 'border-black/10 hover:border-indigo-500'}`}
-            >
-              <ChevronRight className={`w-5 h-5 ${isDark ? 'text-white' : 'text-slate-900'}`} />
-            </button>
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={prevSlide}
+                className={`w-12 h-12 flex items-center justify-center border transition-colors ${isDark ? 'border-white/10 hover:border-indigo-500 hover:bg-indigo-500/10' : 'border-black/10 hover:border-indigo-500'}`}
+              >
+                <ChevronLeft className={`w-5 h-5 ${isDark ? 'text-white' : 'text-slate-900'}`} />
+              </button>
+              <button 
+                onClick={nextSlide}
+                className={`w-12 h-12 flex items-center justify-center border transition-colors ${isDark ? 'border-white/10 hover:border-indigo-500 hover:bg-indigo-500/10' : 'border-black/10 hover:border-indigo-500'}`}
+              >
+                <ChevronRight className={`w-5 h-5 ${isDark ? 'text-white' : 'text-slate-900'}`} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
