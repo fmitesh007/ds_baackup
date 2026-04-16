@@ -85,61 +85,44 @@ const fragmentShader = `
   }
 
   void main() {
-    colors[0] = vec3(0.08, 0.08, 0.12); // Dark base
-    colors[1] = vec3(0.2, 0.1, 0.4);    // Deep purple
-    colors[2] = vec3(0.1, 0.3, 0.6);    // Electric blue
-    colors[3] = vec3(0.5, 0.15, 0.4);   // Magenta
-    colors[4] = vec3(0.2, 0.5, 0.7);    // Soft cyan
+    colors[0] = vec3(0.043, 0.043, 0.059);
+    colors[1] = vec3(0.12, 0.05, 0.25);
+    colors[2] = vec3(0.05, 0.15, 0.35);
+    colors[3] = vec3(0.25, 0.08, 0.22);
+    colors[4] = vec3(0.1, 0.25, 0.4);
 
     vec2 uv = vUv;
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
-    
-    // Mouse influence (subtle)
-    vec2 mouseInfluence = (uMouse - 0.5) * 0.15;
+    vec2 mouseInfluence = (uMouse - 0.5) * 0.08;
     vec2 distortedUV = uv + mouseInfluence;
+    float time = uTime * 0.1;
 
-    float time = uTime * 0.15;
+    float blob1 = fbm(vec3(distortedUV * 1.5 + vec2(time * 0.3, time * 0.2), time * 0.15));
+    float blob2 = fbm(vec3(distortedUV * 1.2 + vec2(-time * 0.25, time * 0.3), time * 0.2 + 10.0));
+    float blob3 = fbm(vec3(distortedUV * 1.8 + vec2(time * 0.2, -time * 0.15), time * 0.18 + 20.0));
 
-    // Create multiple flowing blobs using noise
-    float blob1 = fbm(vec3(distortedUV * 2.0 + vec2(time * 0.5, time * 0.3), time * 0.2));
-    float blob2 = fbm(vec3(distortedUV * 1.5 + vec2(-time * 0.4, time * 0.5), time * 0.3 + 10.0));
-    float blob3 = fbm(vec3(distortedUV * 2.5 + vec2(time * 0.3, -time * 0.2), time * 0.25 + 20.0));
-    float blob4 = fbm(vec3(distortedUV * 1.8 + vec2(-time * 0.2, -time * 0.4), time * 0.15 + 30.0));
-    float blob5 = fbm(vec3(distortedUV * 3.0 + vec2(time * 0.1, time * 0.6), time * 0.1 + 40.0));
+    float t1 = smoothstep(-0.2, 0.4, blob1);
+    float t2 = smoothstep(-0.15, 0.5, blob2);
+    float t3 = smoothstep(-0.1, 0.6, blob3);
 
-    // Smooth color blending
-    float t1 = smoothstep(-0.3, 0.5, blob1);
-    float t2 = smoothstep(-0.2, 0.6, blob2);
-    float t3 = smoothstep(-0.1, 0.7, blob3);
-    float t4 = smoothstep(-0.2, 0.5, blob4);
-    float t5 = smoothstep(0.0, 0.8, blob5);
-
-    // Mix colors based on blob values
     vec3 finalColor = colors[0];
-    finalColor = mix(finalColor, colors[1], t1 * 0.7);
-    finalColor = mix(finalColor, colors[2], t2 * 0.6);
-    finalColor = mix(finalColor, colors[3], t3 * 0.5);
-    finalColor = mix(finalColor, colors[4], t4 * 0.4);
-    finalColor = mix(finalColor, colors[1] + colors[2] * 0.5, t5 * 0.3);
+    finalColor = mix(finalColor, colors[1], t1 * 0.5);
+    finalColor = mix(finalColor, colors[2], t2 * 0.4);
+    finalColor = mix(finalColor, colors[3], t3 * 0.3);
 
-    // Add subtle glow/hotspots
-    float glow1 = exp(-3.0 * length(uv - vec2(0.3 + sin(time) * 0.1, 0.4 + cos(time * 0.7) * 0.1)));
-    float glow2 = exp(-3.0 * length(uv - vec2(0.7 + cos(time * 0.8) * 0.1, 0.6 + sin(time * 0.6) * 0.1)));
-    float glow3 = exp(-2.5 * length(uv - vec2(0.5 + sin(time * 0.5) * 0.15, 0.3 + cos(time * 0.9) * 0.1)));
+    float glow1 = exp(-4.0 * length(uv - vec2(0.35 + sin(time) * 0.08, 0.45 + cos(time * 0.6) * 0.08)));
+    float glow2 = exp(-4.5 * length(uv - vec2(0.65 + cos(time * 0.7) * 0.08, 0.55 + sin(time * 0.5) * 0.08)));
 
-    finalColor += colors[2] * glow1 * 0.15;
-    finalColor += colors[3] * glow2 * 0.12;
-    finalColor += colors[4] * glow3 * 0.1;
+    finalColor += colors[2] * glow1 * 0.12;
+    finalColor += colors[3] * glow2 * 0.1;
 
-    // Vignette
     vec2 vignetteUV = uv * (1.0 - uv);
     float vignette = vignetteUV.x * vignetteUV.y * 15.0;
     vignette = pow(vignette, 0.25);
     finalColor *= vignette;
 
-    // Subtle noise/grain
     float noise = fract(sin(dot(uv * 1000.0, vec2(12.9898, 78.233))) * 43758.5453);
-    finalColor += (noise - 0.5) * 0.015;
+    finalColor += (noise - 0.5) * 0.01;
 
     gl_FragColor = vec4(finalColor, 1.0);
   }
