@@ -4,9 +4,6 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const NeuralOverlay = dynamic(() => import('./NeuralOverlay'), { ssr: false });
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -67,8 +64,6 @@ export default function Hero() {
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
       </motion.div>
-
-      <NeuralOverlay />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
