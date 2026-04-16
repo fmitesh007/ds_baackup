@@ -4,9 +4,6 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const MeshGradient = dynamic(() => import('./MeshGradient'), { ssr: false });
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -28,14 +25,19 @@ export default function Hero() {
   if (!mounted) return null;
 
   return (
-    <section id="hero" ref={containerRef} className="min-h-screen flex items-center pt-20 relative overflow-hidden bg-[#0b0b0f]">
-      <div className="absolute inset-0 mesh-grid" />
+    <section id="hero" ref={containerRef} className="min-h-screen flex items-center pt-20 relative overflow-hidden">
       <motion.div 
         className="absolute inset-0 pointer-events-none"
         style={{ y }}
       >
         <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px] bg-indigo-600/20"
+          className={`absolute inset-0 ${isDark ? 'bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.08)_0%,_transparent_70%)]' : 'bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.05)_0%,_transparent_70%)]'}`}
+          animate={{ opacity: [0.8, 1, 0.8] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        <motion.div 
+          className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px] ${isDark ? 'bg-indigo-600/20' : 'bg-indigo-500/15'}`}
           animate={{ 
             x: [0, 30, 0], 
             y: [0, -20, 0],
@@ -43,8 +45,9 @@ export default function Hero() {
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
+        
         <motion.div 
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[120px] bg-cyan-500/20"
+          className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[120px] ${isDark ? 'bg-cyan-500/20' : 'bg-cyan-400/15'}`}
           animate={{ 
             x: [0, -40, 0], 
             y: [0, 30, 0],
@@ -52,14 +55,16 @@ export default function Hero() {
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
+        
         <motion.div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px] bg-purple-500/10"
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px] ${isDark ? 'bg-purple-500/10' : 'bg-purple-400/10'}`}
           animate={{ 
             scale: [1, 1.3, 1],
             rotate: [0, 30, 0]
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
+
         <motion.div 
           className="absolute top-20 left-10 w-2 h-2 bg-indigo-500 rounded-full"
           animate={{ y: [0, 20, 0], opacity: [0.3, 1, 0.3] }}
