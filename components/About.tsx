@@ -120,19 +120,22 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          className="overflow-hidden"
         >
           <h3 className={`text-xl font-bold mb-6 ${isDark ? 'text-white' : 'text-slate-900'}`}>Tech Stack</h3>
-          <div className="flex flex-wrap gap-4">
-            {techStack.map((tech, i) => (
-              <motion.div
-                key={i}
-                className={`px-5 py-4 flex items-center gap-3 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
-                whileHover={{ scale: 1.05 }}
-              >
-                <span className="text-2xl">{tech.icon}</span>
-                <span className={`font-medium text-lg ${isDark ? 'text-white' : 'text-slate-900'}`}>{tech.name}</span>
-              </motion.div>
-            ))}
+          <div className="relative">
+            <div className="flex animate-marquee gap-4">
+              {[...techStack, ...techStack, ...techStack].map((tech, i) => (
+                <motion.div
+                  key={i}
+                  className={`flex-shrink-0 px-5 py-4 flex items-center gap-3 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span className="text-2xl">{tech.icon}</span>
+                  <span className={`font-medium text-lg ${isDark ? 'text-white' : 'text-slate-900'}`}>{tech.name}</span>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>
