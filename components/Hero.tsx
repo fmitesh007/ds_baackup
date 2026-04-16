@@ -4,6 +4,9 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const NeuralHead = dynamic(() => import('./NeuralHead'), { ssr: false });
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -161,21 +164,8 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <div className="relative">
-              <motion.div
-                className="w-72 h-72 accent-gradient rounded-full flex items-center justify-center"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                <span className="text-6xl font-black text-white">DS</span>
-              </motion.div>
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                animate={{ 
-                  boxShadow: ['0 0 30px rgba(99,102,241,0.3)', '0 0 80px rgba(99,102,241,0.6)', '0 0 30px rgba(99,102,241,0.3)']
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
+            <div className="w-80 h-80">
+              <NeuralHead />
             </div>
           </motion.div>
         </div>
