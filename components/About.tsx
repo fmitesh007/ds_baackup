@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
-import { Code, Users, Rocket, Shield, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Code, Users, Rocket, Shield, ArrowRight, ArrowLeft, Box, Database, Cloud, Server, Cog } from 'lucide-react';
 
 const features = [
   { icon: Code, title: 'Digital Products', desc: 'Architectural consultation and reference architectures for robust software ecosystems.' },
@@ -13,14 +13,14 @@ const features = [
 ];
 
 const techStack = [
-  { name: 'React', icon: '⚛️' },
-  { name: 'Next.js', icon: '▲' },
-  { name: 'TypeScript', icon: '📘' },
-  { name: 'Node.js', icon: '🟢' },
-  { name: 'PostgreSQL', icon: '🐘' },
-  { name: 'Docker', icon: '🐳' },
-  { name: 'AWS', icon: '☁️' },
-  { name: 'GraphQL', icon: '◼️' },
+  { name: 'React', icon: Code, color: 'text-cyan-400' },
+  { name: 'Next.js', icon: Box, color: 'text-white' },
+  { name: 'TypeScript', icon: Cog, color: 'text-blue-400' },
+  { name: 'Node.js', icon: Server, color: 'text-green-500' },
+  { name: 'PostgreSQL', icon: Database, color: 'text-blue-500' },
+  { name: 'Docker', icon: Box, color: 'text-blue-400' },
+  { name: 'AWS', icon: Cloud, color: 'text-yellow-400' },
+  { name: 'GraphQL', color: 'text-pink-500' },
 ];
 
 export default function About() {
@@ -131,7 +131,7 @@ export default function About() {
                   className={`flex-shrink-0 px-5 py-4 flex items-center gap-3 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <span className="text-2xl">{tech.icon}</span>
+                  {tech.icon && <tech.icon className={`w-6 h-6 ${tech.color || 'text-white'}`} />}
                   <span className={`font-medium text-lg ${isDark ? 'text-white' : 'text-slate-900'}`}>{tech.name}</span>
                 </motion.div>
               ))}
