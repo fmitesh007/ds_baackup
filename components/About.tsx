@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
-import { Code, Users, Rocket, Shield, Zap, Globe, Cpu, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Code, Users, Rocket, Shield, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const features = [
   { icon: Code, title: 'Digital Products', desc: 'Architectural consultation and reference architectures for robust software ecosystems.' },
@@ -25,8 +25,6 @@ const techStack = [
 
 export default function About() {
   const [mounted, setMounted] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -40,15 +38,6 @@ export default function About() {
 
   const isDark = !mounted || theme === 'dark' || !theme;
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
-
-  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % features.length);
-  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + features.length) % features.length);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(nextSlide, 4000);
-    return () => clearInterval(interval);
-  }, [isPaused]);
 
   if (!mounted) return null;
 
@@ -104,60 +93,25 @@ export default function About() {
         </motion.p>
 
         <div className="mb-16">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>What We Do</h3>
-            <div className="flex gap-2">
-              <button 
-                onClick={prevSlide}
-                className={`w-10 h-10 flex items-center justify-center border ${isDark ? 'border-white/10 hover:border-indigo-500' : 'border-black/10 hover:border-indigo-500'}`}
+          <h3 className={`text-xl font-bold mb-6 ${isDark ? 'text-white' : 'text-slate-900'}`}>What We Do</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {features.map((feature, i) => (
+              <motion.div
+                key={i}
+                className={`p-6 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -5 }}
               >
-                <ArrowLeft className={`w-4 h-4 ${isDark ? 'text-white' : 'text-slate-900'}`} />
-              </button>
-              <button 
-                onClick={nextSlide}
-                className={`w-10 h-10 flex items-center justify-center border ${isDark ? 'border-white/10 hover:border-indigo-500' : 'border-black/10 hover:border-indigo-500'}`}
-              >
-                <ArrowRight className={`w-4 h-4 ${isDark ? 'text-white' : 'text-slate-900'}`} />
-              </button>
-            </div>
-          </div>
-
-          <div 
-            className="relative overflow-hidden"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
-            <div className="flex gap-4">
-              {features.map((feature, i) => (
-                <motion.div
-                  key={i}
-                  className={`flex-shrink-0 w-full md:w-[calc(50%-8px)] lg:w-[calc(33%-16px)] p-6 ${
-                    i === activeIndex 
-                      ? 'block' 
-                      : 'hidden'
-                  } ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: i === activeIndex ? 1 : 0, x: i === activeIndex ? 0 : 50 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <div className="w-12 h-12 accent-gradient flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h4 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>{feature.title}</h4>
-                  <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{feature.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="flex justify-center gap-2 mt-6">
-              {features.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveIndex(i)}
-                  className={`h-1 transition-all ${i === activeIndex ? 'w-8 bg-indigo-500' : isDark ? 'w-2 bg-white/20' : 'w-2 bg-slate-300'}`}
-                />
-              ))}
-            </div>
+                <div className="w-12 h-12 accent-gradient flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-white" />
+                </div>
+                <h4 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>{feature.title}</h4>
+                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{feature.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
 
@@ -172,11 +126,11 @@ export default function About() {
             {techStack.map((tech, i) => (
               <motion.div
                 key={i}
-                className={`px-4 py-3 flex items-center gap-2 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
+                className={`px-5 py-4 flex items-center gap-3 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
                 whileHover={{ scale: 1.05 }}
               >
-                <span className="text-xl">{tech.icon}</span>
-                <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-900'}`}>{tech.name}</span>
+                <span className="text-2xl">{tech.icon}</span>
+                <span className={`font-medium text-lg ${isDark ? 'text-white' : 'text-slate-900'}`}>{tech.name}</span>
               </motion.div>
             ))}
           </div>

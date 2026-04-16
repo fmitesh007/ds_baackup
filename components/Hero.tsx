@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -79,12 +79,6 @@ export default function Hero() {
             transition={{ duration: 0.6 }}
           >
             <div className={`inline-flex items-center gap-2 px-4 py-2 glass rounded-sm mb-8`}>
-              <motion.span
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              >
-                <Sparkles className={`w-4 h-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
-              </motion.span>
               <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Engineering the Future</span>
             </div>
           </motion.div>
