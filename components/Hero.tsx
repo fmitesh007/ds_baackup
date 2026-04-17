@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import NeuralBrain from './NeuralBrain';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -67,8 +66,8 @@ export default function Hero() {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
-        <div className="grid lg:grid-cols-5 gap-12 items-center">
-          <motion.div style={{ opacity, scale }} className="lg:col-span-2">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <motion.div style={{ opacity, scale }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -81,7 +80,7 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1 
-              className={`text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-6 ${isDark ? 'text-white' : 'text-slate-900'}`}
+              className={`text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-8 ${isDark ? 'text-white' : 'text-slate-900'}`}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -154,18 +153,6 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
-          </motion.div>
-
-          <motion.div 
-            className="hidden lg:flex items-center justify-center lg:col-span-3"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <div className="relative w-full aspect-square max-w-[700px]">
-              <div className={`absolute inset-0 blur-[120px] ${isDark ? 'bg-indigo-500/40' : 'bg-indigo-500/25'} rounded-full scale-150`} />
-              <NeuralBrain />
-            </div>
           </motion.div>
         </div>
       </div>
