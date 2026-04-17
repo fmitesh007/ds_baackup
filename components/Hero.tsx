@@ -66,7 +66,7 @@ export default function Hero() {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
-        <div className="grid lg:grid-cols-1 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div style={{ opacity, scale }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -152,6 +152,35 @@ export default function Hero() {
                   <div className={`text-sm uppercase tracking-widest ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>{stat.label}</div>
                 </motion.div>
               ))}
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hidden lg:flex items-center justify-center"
+          >
+            <motion.div
+              animate={{ 
+                y: [0, -20, 0],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{ 
+                duration: 6, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="relative"
+            >
+              <div className={`absolute inset-0 blur-3xl ${isDark ? 'bg-indigo-500/30' : 'bg-indigo-400/20'} rounded-full scale-150`} />
+              <motion.img 
+                src="/favicon-hero.png" 
+                alt="Datascon Logo"
+                className="w-80 h-80 object-contain relative z-10"
+                whileHover={{ scale: 1.1 }}
+                style={{ filter: isDark ? 'drop-shadow(0 0 30px rgba(99, 102, 241, 0.5))' : 'drop-shadow(0 0 20px rgba(99, 102, 241, 0.3))' }}
+              />
             </motion.div>
           </motion.div>
         </div>
