@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning style={{ background: 'transparent' }}>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className="antialiased" style={{ background: 'transparent' }}>
+      <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <FlowBgWithTheme />
           {/* <div className="fixed inset-0 mesh-grid pointer-events-none z-0" /> */}
