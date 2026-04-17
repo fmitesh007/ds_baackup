@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import TechBrain from './TechBrain';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -153,6 +154,17 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hidden lg:flex items-center justify-center"
+          >
+            <div className="w-[600px] h-[600px] relative">
+              <TechBrain />
+            </div>
           </motion.div>
         </div>
       </div>
