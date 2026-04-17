@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import { MapPin, Mail, Phone, Send } from 'lucide-react';
 
 const contactInfo = [
@@ -13,9 +14,34 @@ const contactInfo = [
 
 export default function Contact() {
   const [mounted, setMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const form = useRef<HTMLFormElement>(null);
   const { theme } = useTheme();
 
   useEffect(() => setMounted(true), []);
+
+  const sendEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.current) return;
+
+    setIsSubmitting(true);
+    try {
+      await emailjs.sendForm(
+        'service_j1965gh',
+        'template_cyv4ytw',
+        form.current,
+        'LigY8f94bxkuETr6z'
+      );
+      setIsSuccess(true);
+      form.current.reset();
+      setTimeout(() => setIsSuccess(false), 3000);
+    } catch (error) {
+      console.error('EmailJS error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const isDark = !mounted || theme === 'dark' || !theme;
 
@@ -70,38 +96,45 @@ export default function Contact() {
           </motion.div>
 
           <motion.form
+            ref={form}
+            onSubmit={sendEmail}
             className={`p-8 ${isDark ? 'glass' : 'bg-white border border-black/10'}`}
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            onSubmit={(e) => e.preventDefault()}
           >
+            {isSuccess && (
+              <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 text-green-400 rounded-lg text-center">
+                Message sent successfully!
+              </div>
+            )}
             <div className="grid sm:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Your Name</label>
-                <input type="text" placeholder="John Doe" className="w-full px-5 py-4" />
+                <input type="text" name="name" required placeholder="John Doe" className="w-full px-5 py-4" />
               </div>
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Your Email</label>
-                <input type="email" placeholder="john@example.com" className="w-full px-5 py-4" />
+                <input type="email" name="email" required placeholder="john@example.com" className="w-full px-5 py-4" />
               </div>
             </div>
             <div className="mb-6">
               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Subject</label>
-              <input type="text" placeholder="How can we help?" className="w-full px-5 py-4" />
+              <input type="text" name="subject" required placeholder="How can we help?" className="w-full px-5 py-4" />
             </div>
             <div className="mb-8">
               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Message</label>
-              <textarea rows={5} placeholder="Tell us about your project..." className="w-full px-5 py-4 resize-none"></textarea>
+              <textarea name="message" required rows={5} placeholder="Tell us about your project..." className="w-full px-5 py-4 resize-none"></textarea>
             </div>
             <motion.button
               type="submit"
-              className="w-full py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3"
-              whileHover={{ scale: 1.02, boxShadow: '0 0 40px rgba(99, 102, 241, 0.4)' }}
-              whileTap={{ scale: 0.98 }}
+              disabled={isSubmitting}
+              className="w-full py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 disabled:opacity-70"
+              whileHover={!isSubmitting ? { scale: 1.02, boxShadow: '0 0 40px rgba(99, 102, 241, 0.4)' } : {}}
+              whileTap={!isSubmitting ? { scale: 0.98 } : {}}
             >
-              Send Message
-              <Send className="w-5 h-5" />
+              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {!isSubmitting && <Send className="w-5 h-5" />}
             </motion.button>
           </motion.form>
         </div>

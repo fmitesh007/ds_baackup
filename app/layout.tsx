@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import CustomCursor from '@/components/CustomCursor';
+import FlowBgWithTheme from '@/components/FlowBgWithTheme';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -10,13 +11,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning style={{ background: 'transparent' }}>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className="antialiased">
+      <body className="antialiased" style={{ background: 'transparent' }}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <div className="fixed inset-0 mesh-grid pointer-events-none z-0" />
+          <FlowBgWithTheme />
+          {/* <div className="fixed inset-0 mesh-grid pointer-events-none z-0" /> */}
           <CustomCursor />
           <div className="relative z-10">
             {children}

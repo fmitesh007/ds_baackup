@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background: transparent !important;
+}
+
 body {
+  background: transparent !important;
   font-family: 'Inter', system-ui, sans-serif;
 }
 
@@ -11,7 +16,7 @@ body {
 }
 
 .light body {
-  @apply bg-[#f8fafc] text-slate-900;
+  @apply bg-transparent text-slate-900;
 }
 
 @media (min-width: 1024px) {

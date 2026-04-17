@@ -11,7 +11,7 @@ const testimonials = [
     role: "Founder",
     company: "Mimir",
     companyUrl: "https://www.mimirml.com/",
-    img: "https://raw.githubusercontent.com/pruthvirajjadhav1/Datascon-Site/main/public/MAX.jpg",
+    img: "/MAX.jpg",
     text: "Datascon delivered an exceptional product that exceeded our expectations. Their technical expertise and commitment to quality are unmatched."
   },
   {
@@ -19,7 +19,7 @@ const testimonials = [
     role: "Founder",
     company: "Sinbad HQ",
     companyUrl: "https://sinbadhq.com/",
-    img: "https://raw.githubusercontent.com/pruthvirajjadhav1/Datascon-Site/main/public/Firas.jpg",
+    img: "/Firas.jpg",
     text: "Working with Datascon was a game-changer for our startup. They understood our vision and brought it to life beautifully."
   },
   {
@@ -27,7 +27,7 @@ const testimonials = [
     role: "Founder",
     company: "Text to Design",
     companyUrl: "https://www.texttodesign.ai/",
-    img: "https://raw.githubusercontent.com/pruthvirajjadhav1/Datascon-Site/main/public/Olesky.jpg",
+    img: "/Olesky.jpg",
     text: "Pruthviraj has been amazing to work with; he completed the project quickly and went above and beyond, with excellent documentation."
   },
   {
@@ -35,7 +35,7 @@ const testimonials = [
     role: "Head of Engineering",
     company: "interintellect",
     companyUrl: "https://interintellect.com/",
-    img: "https://raw.githubusercontent.com/pruthvirajjadhav1/Datascon-Site/main/public/Timothy-Lim.jpg",
+    img: "/Timothy-Lim.jpg",
     text: "It's been a pleasure working with this team. Quick, professional, and highly skilled. Would definitely recommend!"
   },
   {
@@ -43,7 +43,7 @@ const testimonials = [
     role: "Founder",
     company: "Plexus",
     companyUrl: "https://plexus.earth/",
-    img: "https://raw.githubusercontent.com/pruthvirajjadhav1/Datascon-Site/main/public/Davey.jpg",
+    img: "/Davey.jpg",
     text: "The team's attention to detail and problem-solving skills are exceptional. They delivered a robust solution on time."
   },
   {
@@ -51,7 +51,7 @@ const testimonials = [
     role: "Co-Founder",
     company: "Cosine (YC W23)",
     companyUrl: "https://cosine.sh/",
-    img: "https://raw.githubusercontent.com/pruthvirajjadhav1/Datascon-Site/main/public/Alistair.jpg",
+    img: "/Alistair.jpg",
     text: "Outstanding work from the Datascon team. Their expertise in modern technologies helped us launch faster."
   },
 ];
@@ -150,7 +150,8 @@ export default function Testimonials() {
                     alt={current.name} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${current.name}&background=6366f1&color=fff`;
+                      const target = e.target as HTMLImageElement;
+                      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(current.name)}&background=6366f1&color=fff`;
                     }}
                   />
                 </div>
