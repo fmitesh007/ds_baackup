@@ -39,8 +39,8 @@ export default function NeuralBrain() {
     let height = 600;
 
     const resize = () => {
-      width = Math.min(600, window.innerWidth * 0.8);
-      height = width;
+      width = 600;
+      height = 600;
       canvas.width = width;
       canvas.height = height;
     };
@@ -236,7 +236,7 @@ export default function NeuralBrain() {
   return (
     <canvas
       ref={canvasRef}
-      className="w-full max-w-[600px] aspect-square"
+      className="w-full h-full"
     />
   );
 }
