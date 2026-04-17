@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import NeuralBrain from './NeuralBrain';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -153,6 +154,18 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
+          </motion.div>
+
+          <motion.div 
+            className="hidden lg:flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <div className="relative">
+              <div className={`absolute inset-0 blur-3xl ${isDark ? 'bg-indigo-500/20' : 'bg-indigo-500/10'} rounded-full`} />
+              <NeuralBrain />
+            </div>
           </motion.div>
         </div>
       </div>
