@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import MiniDesk from './MiniDesk';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -67,7 +66,7 @@ export default function Hero() {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-1 gap-12 items-center">
           <motion.div style={{ opacity, scale }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -154,17 +153,6 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="hidden lg:flex items-center justify-center"
-          >
-            <div className="w-[600px] h-[600px]">
-              <MiniDesk />
-            </div>
           </motion.div>
         </div>
       </div>
